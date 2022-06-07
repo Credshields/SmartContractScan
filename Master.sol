@@ -1,4 +1,4 @@
-pragma solidity ^0.7.6;
+pragma solidity 0.8.4;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -6,7 +6,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract MasterToken is Ownable {
     function dangerousWithdraw() public returns (bool) {
         address owner;
-        // <yes> <report> SOLIDITY_TX_ORIGIN 12e802
         if (tx.origin == owner) {
             return true;
         }
@@ -15,11 +14,10 @@ contract MasterToken is Ownable {
             revert();
         }
         require(tx.origin == msg.sender);
-        // <yes> <report> SOLIDITY_TX_ORIGIN 12e802
         owner = tx.origin;
     }
 
-    function burnToken(address account, uint256 amount) external {
+    function burnToken(address account, uint256 amount) external onlyOwner{
         _burn(account, amount);
     }
 
